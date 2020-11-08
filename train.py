@@ -144,8 +144,8 @@ class Trainer():
         random.shuffle(datas_new_labels)
         self.validation_datas = [item[0] for item in datas_new_labels]
         self.validation_labels = [item[1] for item in datas_new_labels]
-        self.validation_datas = np.array(self.training_datas )
-        self.validation_labels = np.array(self.training_labels)
+        self.validation_datas = np.array(self.validation_datas )
+        self.validation_labels = np.array(self.validation_labels)
 
 
         self.training_labels = np.eye(self.class_num)[self.training_labels]
