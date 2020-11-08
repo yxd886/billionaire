@@ -174,7 +174,8 @@ class Trainer():
         model.add(tf.keras.layers.Softmax())
         model.compile(optimizer="adam", loss="mse",metrics=['accuracy','mse'])
         self.model = model
-        self.model.load_weights("model/model")
+        if os.path.exists("model/model"):
+            self.model.load_weights("model/model")
 
     def train(self):
         self.model.fit(self.training_datas, self.training_labels, batch_size=self.batch_size,
