@@ -18,7 +18,7 @@ print(df.head())
 
 
 # In[30]:
-feature_columns = ['Close','High','Low','Open','Volume',"WeightedAverage"]
+feature_columns = ['Close','High','Low','Open','Volume']
 input_features = df.loc[:,feature_columns].values
 prices= df.loc[:,'Close'].values
 times = df.loc[:,'Timestamp'].values

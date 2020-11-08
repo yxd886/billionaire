@@ -39,8 +39,8 @@ class Trainer():
         self.class_num = 9
         self.units = 50
         self.second_units = 30
-        self.batch_size = 8
-        self.epochs = 50
+        self.batch_size = 256
+        self.epochs = 100
         self.output_size = 1
         self.reg = 1
         self.learning_rate= 0.01
@@ -123,6 +123,31 @@ class Trainer():
         self.training_datas = np.array(self.training_datas )
         self.training_labels = np.array(self.training_labels)
 
+
+        group = dict()
+        for i, label in enumerate(self.validation_labels):
+            if group.get(label,None)==None:
+                group[label] = list()
+            group[label].append(self.validation_datas[i])
+        for key in group:
+            print(key,len(group[key]))
+        for key in group:
+            if key!=0:
+                group[key] =np.repeat(np.array(group[key]),int(len(group[0])//len(group[key])),axis=0)
+        for key in group:
+            print(key,len(group[key]))
+
+        datas_new_labels=list()
+        for key in group:
+            for input in group[key]:
+                datas_new_labels.append((input,key))
+        random.shuffle(datas_new_labels)
+        self.validation_datas = [item[0] for item in datas_new_labels]
+        self.validation_labels = [item[1] for item in datas_new_labels]
+        self.validation_datas = np.array(self.training_datas )
+        self.validation_labels = np.array(self.training_labels)
+
+
         self.training_labels = np.eye(self.class_num)[self.training_labels]
         self.validation_labels = np.eye(self.class_num)[self.validation_labels]
 
@@ -152,8 +177,8 @@ class Trainer():
         self.model.load_weights("model/model")
 
     def train(self):
-        self.model.fit(self.training_datas, self.training_labels, batch_size=32,
-                  validation_data=(self.validation_datas, self.validation_labels), epochs=100,
+        self.model.fit(self.training_datas, self.training_labels, batch_size=self.batch_size,
+                  validation_data=(self.validation_datas, self.validation_labels), epochs=self.epochs,
                   callbacks=[tf.keras.callbacks.ModelCheckpoint("model/model"),tf.keras.callbacks.Callback()])
 
     def predict(self):
